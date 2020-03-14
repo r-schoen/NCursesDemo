@@ -9,7 +9,7 @@
 // https://www.linuxjournal.com/content/getting-started-ncurses
 // the rest of this comes from here:
 // https://www.linuxjournal.com/content/creating-adventure-game-terminal-ncurses
-
+// TODO: Seperate the triangle game out from the adventure game 
 
 #include <curses.h>
 #include <stdlib.h>
@@ -108,68 +108,4 @@ void draw_map(void) {
     for (y=1;y<LINES / 2; y++) {
         mvhline(y, 1, WATER, COLS / 3);
     }
-}
-
-
-int triangle(void) {
-    long iter;
-    int yi, xi;
-    int y[3], x[3];
-    int index;
-    int maxlines, maxcols;
-    
-    // INITIALIZE NCURSES
-    initscr();
-    cbreak();
-    nocbreak();
-    
-    clear();
-    
-    // INITIALIXE TRIANGLE
-    
-    maxlines = LINES - 1;
-    maxcols = COLS - 1;
-
-    y[0] = 0;
-    x[0] = 0;
-
-    y[1] = maxlines;
-    x[1] = maxcols / 2;
-    
-    y[2] = 0;
-    x[2] = maxcols;
-    
-    mvaddch(y[0], x[0], '0');
-    mvaddch(y[1], x[1], '1');
-    mvaddch(y[2], x[2], '2');
-    
-    yi = get_random_int((int)1, (int)100) % maxlines;
-    xi = get_random_int((int)1, (int)100) % maxcols;
-    
-    mvaddch(yi, xi, '.');
-    
-    // INITIATE THE TRIANGLE
-    for (iter = 0; iter < ITERMAX; iter++) {
-        index = get_random_int((int)1, (int)100) % 3;
-        
-        yi = (yi + y[index]) / 2;
-        xi = (xi + x[index]) / 2;
-        
-        mvaddch(yi, xi, '*');
-        refresh();
-    }
-    
-    mvaddstr(maxlines, 0, "Press any key to quit...");
-    
-    refresh();
-    
-    getch();
-    endwin();
-    
-    
-    exit(0);
-}
-
-int get_random_int(int from, int to) {
-    return rand() % (to - from) + from;
 }
